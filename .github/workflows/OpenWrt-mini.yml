@@ -46,11 +46,11 @@ jobs:
         run: |
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           #sed -i 's/coolsnowwolf/sirpdboy/g' ./feeds.conf.default
-          git clone https://github.com/sirpdboy/sirpdboy-package ./package/diy
+          git clone https://github.com/sirpdboy/sirpdboy-package package/diy
           ./scripts/feeds update -a
       - name: Update package
         run: |
-          curl -fsSL https://git.io/JkkuR | sh
+          curl -fsSL https://git.io/JUgLD | sh
           ./scripts/feeds install -a
           chmod -R 775 .
       - name: Generate configuration file
