@@ -54,7 +54,7 @@ jobs:
           chmod -R 755 .
       - name: Generate configuration file
         run: |
-          curl -fsSL https://raw.githubusercontent.com/siropboy/other/master/patch/x86-64/allapp.config > .config
+          curl -fsSL https://raw.githubusercontent.com/siropboy/other/master/patch/x86-64/appdrv.config > .config
           make defconfig
       - name: Make download
         run: |
