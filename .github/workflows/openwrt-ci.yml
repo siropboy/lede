@@ -77,6 +77,7 @@ jobs:
           mkdir -p ./new/package
           cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./new/package
           find bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./new/firmware
+          find bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ./new/firmware
           cd ./new/firmware
           gzip *.img
       - name: Upload Firmware
