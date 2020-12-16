@@ -74,14 +74,15 @@ jobs:
           du -h --max-depth=1 ./bin
       - name: Prepare Artifact
         run: |
-          mkdir -p ./mini/firmware
-          mkdir -p ./mini/package
-          cp -rf $(find ./bin/packages/ -type f -name "*.ipk") ./mini/package
-          # find ./bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./mini/firmware
+          mkdir -p ./new/firmware
+          mkdir -p ./new/package
+          find  ./lede/bin/targets/ -type d -name "packages" | xargs rm -rf {}
+          cp -rf $(find ./bin/packages/*/* -type f -name "*.ipk") ./new/package
+          # find bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./new/firmware
           find bin/targets/ -name "*sysupgrade*bin*" | xargs -i mv -f {} ./new/firmware
-          cd ./mini/firmware
-          #gzip *.img
-          gzip *.bin
+          cd ./new/firmware
+          # gzip *.img
+          gzip *.bin 
       - name: Upload Firmware
         uses: actions/upload-artifact@main
         with:
