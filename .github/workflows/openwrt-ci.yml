@@ -82,12 +82,12 @@ jobs:
       - name: Upload Firmware
         uses: actions/upload-artifact@main
         with:
-          name: SirpdboyOpenWrt-IPV6-Firmware
+          name: SirpdboyOpenWrt-IPV4P-Firmware
           path: ./new/firmware
       - name: Upload  IPK
         uses: actions/upload-artifact@main
         with:
-          name: SirpdboyOpenWrt-IPV6-Ipk
+          name: SirpdboyOpenWrt-IPV4P-Ipk
           path: ./new/package
       - name: Upload firmware to cowtransfer
         run: |
