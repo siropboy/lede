@@ -32,8 +32,6 @@ jobs:
 
       - name: Space cleanup
         env:
-          REPO_URL: https://github.com/coolsnowwolf/lede
-          REPO_BRANCH: master
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker rmi `docker images -q`
@@ -62,6 +60,9 @@ jobs:
           sudo -E apt-get -qq clean
           sudo timedatectl set-timezone "Asia/Shanghai"
       - name: Update feeds
+        env:
+          REPO_URL: https://github.com/coolsnowwolf/lede
+          REPO_BRANCH: master
         run: |
           git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
           cd openwrt
@@ -102,8 +103,8 @@ jobs:
         run: |
           mkdir -p ./mini/firmware
           mkdir -p ./mini/package
-          find  ./openwrt/bin/targets/ -type d -name "packages" | xargs rm -rf {}
-          cp -rf $(find ./openwrt/bin/packages/ -type f -name "*.ipk") ./mini/package
+          #find  ./openwrt/bin/targets/ -type d -name "packages" | xargs rm -rf {}
+          cp -rf $(find ./openwrt/bin/ -type f -name "*.ipk") ./mini/package
           find ./openwrt/bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./mini/firmware
           cd ./mini/firmware
           gzip *.*
