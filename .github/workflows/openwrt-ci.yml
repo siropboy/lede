@@ -31,6 +31,8 @@ jobs:
           ref: master
       - name: Space cleanup
         env:
+          REPO_URL: https://github.com/coolsnowwolf/lede
+          REPO_BRANCH: master
           DEBIAN_FRONTEND: noninteractive
         run: |
           docker rmi `docker images -q`
@@ -60,26 +62,34 @@ jobs:
           sudo timedatectl set-timezone "Asia/Shanghai"
       - name: Update feeds
         run: |
+          git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
+          cd openwrt
           sed -i 's/#src-git helloworld/src-git helloworld/g' ./feeds.conf.default
           #sed -i 's/coolsnowwolf/sirpdboy/g' ./feeds.conf.default
           git clone https://github.com/sirpdboy/sirpdboy-package package/diy
           ./scripts/feeds update -a
       - name: Update package
+        working-directory: ./openwrt
         run: | 
+          #cd openwrt
           curl -fsSL https://raw.githubusercontent.com/siropboy/other/master/patch/script/uppackage.sh | sh
           ./scripts/feeds install -a
           chmod -R 755 .
       - name: Generate configuration file
+        working-directory: ./openwrt
         run: |
+          #cd openwrt
           curl -fsSL https://raw.githubusercontent.com/siropboy/other/master/patch/x86-64/appdrv.config > .config
           make defconfig
       - name: Make download
+        working-directory: ./openwrt
         run: |
           make download -j8
 
           find dl -size -1024c -exec ls -l {} \;
           find dl -size -1024c -exec rm -f {} \;
       - name: Compile firmware
+        working-directory: ./openwrt
         run: |
           make -j$(nproc) || make -j1 V=s
           echo "======================="
@@ -92,10 +102,10 @@ jobs:
           du -h --max-depth=1 ./bin
       - name: Prepare Artifact
         run: |
-         mkdir -p ./new/firmware
+          mkdir -p ./new/firmware
           mkdir -p ./new/package
-          cp -rf $(find ./bin/ -type f -name "*.ipk") ./new/package
-          find bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./new/firmware
+          cp -rf $(find ./openwrt/bin/ -type f -name "*.ipk") ./new/package
+          find openwrt/bin/targets/ -name "*combined*img*" | xargs -i mv -f {} ./new/firmware
           cd ./new/firmware
           gzip *.*
       - name: Upload Firmware
