@@ -73,14 +73,14 @@ jobs:
         working-directory: ./openwrt
         run: | 
           #cd openwrt
-          curl -fsSL https://raw.githubusercontent.com/siropboy/other/master/patch/script/uppackage.sh | sh
+          curl -fsSL https://raw.githubusercontent.com/loso3000/other/master/patch/script/uppackage.sh | sh
           ./scripts/feeds install -a
           chmod -R 755 .
       - name: Generate configuration file
         working-directory: ./openwrt
         run: |
           #cd openwrt
-          curl -fsSL https://raw.githubusercontent.com/siropboy/other/master/patch/x86-64/appdrv.config > .config
+          curl -fsSL https://raw.githubusercontent.com/loso3000/other/master/patch/x86-64/appdrv.config > .config
           make defconfig
       - name: Make download
         working-directory: ./openwrt
